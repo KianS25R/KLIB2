@@ -30,3 +30,17 @@ def readl(file: str) -> list:
                 b.append(j)
             a.append(b)
         return a
+
+def write(data: list, file: str):
+    """write list to file"""
+    with open(file, "w") as f:
+        f.write(f"a = {data}\nf=0")
+
+def read(file: str) -> list:
+    """read list from file"""
+    with open(file) as f:
+        data = f.read()
+        f = ""
+        a = {}
+        exec(data,{"f": f}, a)
+        return a["a"]
