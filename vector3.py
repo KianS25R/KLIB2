@@ -1,5 +1,5 @@
 """script handeling class vector3"""
-from kmath import sqrt
+from kmath import sqrt, deg, atan2
 
 class vector3():
     def __init__(self, x, y, z):
@@ -22,3 +22,8 @@ class vector3():
     def length(self):
         """returns length of vector"""
         return sqrt(self.x**2+self.y**2+self.z**2)
+    def angles(self):
+        """returns eleveation and direction of 3 dimensional vector"""
+        e = deg(atan2(self.y, self.x))
+        d = deg(atan2(self.z, self.x))
+        return e, d
