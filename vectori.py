@@ -1,6 +1,7 @@
 from kmath import sqrt
 class vectorI():
     def __init__(self, *values):
+        """creates vector with userdefined dimensions"""
         self.values = values
         self.length = len(self.values)
     def __add__(self, other):

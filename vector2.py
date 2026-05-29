@@ -27,6 +27,7 @@ class vector2():
     def __pow__(self, other):
         return (self.x*other.x)+(self.y*other.y)
     def angle(self):
+        """returns angle for vector2"""
         if self.x != 0:
             return deg(atan(self.y/self.x))
         elif self.x == 0:
