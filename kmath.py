@@ -4,8 +4,6 @@ def pi() -> float:
     """returns first 100 digets of pi"""
     return 3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679
 
-
-
 def sqrt(number) -> float:
     """returns squareroot of number"""
     return number**(1/2)
@@ -22,11 +20,9 @@ def acos(number: float) -> float:
     """returns inverse cosin for number"""
     return (pi()/2)-asin(number)
 
-
 def acosdeg(number: float) -> float:
     """acos but degress instead of radians"""
     return deg(acos(number))
-
 
 def asindeg(number: float) -> float:
     """asin but returns degress instead of radians"""
@@ -90,7 +86,6 @@ def exp(x, terms=20) -> float:
 
     return total
 
-
 def log(x: float, terms=20) -> float:
     if x <= 0:
         raise ValueError("x must be > 0")
@@ -115,7 +110,6 @@ def maximum(x: float) -> float:
         return x
     else:
         return 0
-
 
 def tanh(x: float) -> float:
     return sinh(x)/cosh(x)
@@ -155,7 +149,6 @@ def LeakyReLu(x: float, leak: float = 0.01) -> float:
 
 def Epsilon() -> float:
     return 10**(-8)
-
 
 def FixSoftmax(x: list) -> list:
     newlist = []
