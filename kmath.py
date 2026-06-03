@@ -74,3 +74,97 @@ def tan(opp:float, adj:float) -> float:
     """returns tan to opp/adj"""
     return opp/adj
 
+def factorial(n) -> float:
+    base = 1
+    for i in range(1, n + 1):
+        base *= i
+    return base
+
+def exp(x, terms=20) -> float:
+    total = 1
+    term = 1
+
+    for n in range(1, terms):
+        term *= x / n
+        total += term
+
+    return total
+
+
+def log(x: float, terms=20) -> float:
+    if x <= 0:
+        raise ValueError("x must be > 0")
+    y = x - 1
+    total = 0
+    for n in range(1, terms + 1):
+        term = (y ** n) / n
+        if n % 2 == 1:
+            total += term
+        else:
+            total -= term
+    return total
+
+def sinh(x: float) -> float:
+    return (exp(x)-exp(-x))/2
+
+def cosh(x: float) -> float:
+    return (exp(x)+exp(-x))/2
+
+def maximum(x: float) -> float:
+    if x > 0:
+        return x
+    else:
+        return 0
+
+
+def tanh(x: float) -> float:
+    return sinh(x)/cosh(x)
+
+def coth(x: float) -> float:
+    return cosh(x)/sinh(x)
+
+def sech(x: float) -> float:
+    return 1/cosh(x)
+
+def csch(x: float) -> float:
+    return 1/sinh(x)
+
+def arsinh(x: float) -> float:
+    return log(x+sqrt((x**2)+1))
+
+def sigmoid(x: float) -> float:
+    return 1/(1+exp(-x))
+
+def ReLu(x: float) -> float:
+    if x <=0:
+        return 0
+    else:
+        return x
+    
+def ELU(x: float, alpha: float = 1.0) -> float:
+    if x > 0:
+        return x
+    else:
+        return alpha*(exp(x)-1)
+    
+def LeakyReLu(x: float, leak: float = 0.01) -> float:
+    if x > 0:
+        return x
+    else:
+        return leak*x
+
+def Epsilon() -> float:
+    return 10**(-8)
+
+
+def FixSoftmax(x: list) -> list:
+    newlist = []
+    d = 0
+    for i in x:
+        d += exp(i-max(x))
+    for i in x:
+        newlist.append((exp(i-max(x)))/d)
+    return newlist
+
+def softplus(x: float) -> float:
+    return log(1+exp(x))
