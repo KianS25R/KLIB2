@@ -18,7 +18,7 @@ class vector2():
     def length(self):
         """returns length of vector"""
         return sqrt(self.x**2+self.y**2)
-    def cross(self):
+    def across(self):
         """returns cross vector"""
         return vector2(-self.y, self.x)
     def unit(self):

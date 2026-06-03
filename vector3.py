@@ -22,8 +22,21 @@ class vector3():
     def length(self):
         """returns length of vector"""
         return sqrt(self.x**2+self.y**2+self.z**2)
+    def __truediv__(self, other: float):
+        x=self.x/other
+        y=self.y/other
+        z=self.z/other
+        return vector3(x, y, z)
     def angles(self):
         """returns eleveation and direction of 3 dimensional vector"""
         e = deg(atan2(self.y, self.x))
         d = deg(atan2(self.z, self.x))
         return e, d
+    def __floordiv__(self, other: vector3):
+        x = (self.y*other.z)-(self.z*other.y)
+        y = (self.z*other.x)-(self.x*other.z)
+        z = (self.x*other.y)-(self.y*other.x)
+        return vector3(x, y, z)
+    def unit(self):
+        """returns unit vector"""
+        return self/self.length()
