@@ -32,7 +32,7 @@ class vector3():
         e = deg(atan2(self.y, self.x))
         d = deg(atan2(self.z, self.x))
         return e, d
-    def __floordiv__(self, other: vector3):
+    def __floordiv__(self, other: object):
         x = (self.y*other.z)-(self.z*other.y)
         y = (self.z*other.x)-(self.x*other.z)
         z = (self.x*other.y)-(self.y*other.x)
