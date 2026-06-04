@@ -161,3 +161,6 @@ def FixSoftmax(x: list) -> list:
 
 def softplus(x: float) -> float:
     return log(1+exp(x))
+
+def GELU(x: float) -> float:
+    return (0.5*x*(1+tanh(sqrt(2/pi())*(x+0.044715*x**3))))
