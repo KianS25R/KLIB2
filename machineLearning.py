@@ -53,5 +53,7 @@ class RNN_HYBRID():
     def run(self, times):
         for i in range(times):
             self.layer()
-        print(self.h)
-        print(self.loss)
+        print("result: ", self.h)
+        print("target: ", self.y)
+        print("loss: " ,self.loss)
+        print(f"weights: neuron: {self.wx} layer: {self.wh}")
