@@ -70,6 +70,8 @@ def tan(opp:float, adj:float) -> float:
     """returns tan to opp/adj"""
     return opp/adj
 
+
+
 def factorial(n) -> float:
     base = 1
     for i in range(1, n + 1):
@@ -161,3 +163,22 @@ def FixSoftmax(x: list) -> list:
 
 def softplus(x: float) -> float:
     return log(1+exp(x))
+
+def sin_rad(x: float, terms: int = 10) -> float:
+    total = 0
+    for n in range(terms):
+        sign = -1 if n % 2 else 1
+        total += sign * (x**(2*n + 1)) / factorial(2*n + 1)
+    return total
+
+
+def cos_rad(x: float, terms: int = 10) -> float:
+    total = 0
+    for n in range(terms):
+        sign = -1 if n % 2 else 1
+        total += sign * (x**(2*n)) / factorial(2*n)
+    return total
+
+
+def tan_rad(x: float) -> float:
+    return sin_rad(x) / cos_rad(x)
