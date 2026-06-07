@@ -182,3 +182,21 @@ def cos_rad(x: float, terms: int = 10) -> float:
 
 def tan_rad(x: float) -> float:
     return sin_rad(x) / cos_rad(x)
+
+class random():
+    def __init__(self, seeda: int, mina: float, maxa: float):
+        """warning do not make seed to large otherwise it will take an eternaty and also maybe give error or crash recommended range 1-999999"""
+        super().__init__()
+        self.seed = seeda
+        self.min = mina
+        self.max = maxa
+        self.x = (1103515245*seeda+12345) % (2*(10**32))
+        for i in range(0, seeda):
+            abba = self()
+
+    def __call__(self):
+        m = 2*(10**32)
+        a = 1103515245
+        c = 12345
+        self.x = (a*self.x+c) % m
+        return self.min+((self.x/m)*(self.max-self.min))
