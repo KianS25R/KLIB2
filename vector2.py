@@ -1,5 +1,5 @@
 """script handeling class vector2"""
-from kmath import sqrt, atan, deg
+from .kmath import sqrt, atan, deg
 class vector2():
     def __init__(self, x: float, y: float):
         """creates new vector"""

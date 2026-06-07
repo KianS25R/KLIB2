@@ -3,7 +3,7 @@
 
 ## imports ##
 
-from vector3 import vector3
+from .vector3 import vector3
 
 ## class ##
 

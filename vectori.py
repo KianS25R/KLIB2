@@ -1,4 +1,4 @@
-from kmath import sqrt
+from .kmath import sqrt
 class vectorI():
     def __init__(self, *values):
         """creates vector with userdefined dimensions"""

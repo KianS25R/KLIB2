@@ -1,5 +1,5 @@
 """script handeling class vector3"""
-from kmath import sqrt, deg, atan2
+from .kmath import sqrt, deg, atan2
 
 class vector3():
     def __init__(self, x, y, z):

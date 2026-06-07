@@ -1,6 +1,6 @@
 """KLIB2 libary for machine learning such as rln and more..."""
 
-from kmath import *
+from .kmath import *
 
 def hybrid(z: float) -> float:
     if z <= 0:
