@@ -1,7 +1,8 @@
 """KLIB2 libary for machine learning such as rln and more..."""
 
 from .kmath import *
-from agurk import write, read
+from .agurk import write, read
+from .rnn_models import *
 
 def hybrid(z: float) -> float:
     if z <= 0:
