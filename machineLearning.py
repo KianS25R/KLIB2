@@ -10,6 +10,14 @@ def hybrid(z: float) -> float:
     elif z > 0:
         return ReLu(z)
     
+
+def hybrid_prime(z):
+    if z <= 0:
+        return 0.01
+    else:
+        return 1
+
+
 def cz(x: float, w: float, b: float) -> float:
     return x*w+b
 
@@ -75,3 +83,159 @@ class RNN_HYBRID():
         if a == "Y":
             c = input("Filename: ")
             write([self.wx, self.b, self.wh], f"{c}.mem")
+
+class RNNLM_HYBRID():
+    def __init__(self, vocab_size: int, dictionary: str, veclength: int = 32, load_vocab: str = "no", seed: int = 564963, neurons: int = 128, lr: float=0.001):
+        super().__init__()
+        self.genrandd = random(seed,-(1/sqrt(veclength)), 1/sqrt(veclength))
+        self.genrandn = random(seed, -(1/sqrt(neurons)), 1/sqrt(neurons))
+        self.__warm = False
+        self.lr = lr
+        self.__wordstohandle = []
+        if load_vocab != "no":
+            self.embedings = read(f"{load_vocab}/embed.mem")
+            self.vocabL = read(f"{load_vocab}/info.meta")[0]
+            self.vecL = read(f"{load_vocab}/info.meta")[1]
+            self.neurons = read(f"{load_vocab}/info.meta")[2]
+            self.bias = read(f"{load_vocab}/bias.mem")
+            self.lhweights = read(f"{load_vocab}/lhweights.mem")
+            self.lweights = read(f"{load_vocab}/lweights.mem")
+            self.dictionary = read(f"{load_vocab}/dict.mem")
+            self.who = read(f"{load_vocab}/who.mem")
+            self.bo = read(f"{load_vocab}/bo.mem")
+            self.ht = read(f"{load_vocab}/info.meta")[3]
+            print(self.embedings)
+        else:
+            self.neurons = neurons
+            self.embedings = [[self.genrandd() for i in range(veclength)] for j in range(vocab_size)]
+            self.lweights = [[self.genrandd() for i in range(veclength)] for j in range(neurons)]
+            self.lhweights = [[self.genrandn() for i in range(neurons)] for j in range((neurons))]
+            self.bias = [0 for i in range(neurons)]
+            self.who = [[self.genrandn() for i in range(neurons)] for j in range(vocab_size)]
+            self.bo = [0 for i in range(vocab_size)]
+            self.vocabL = vocab_size
+            self.vecL = veclength
+            self.dictionary = read(dictionary)
+            self.ht = [0 for i in range(neurons)]
+    
+    def warmup(self, sentence: str):
+        """use only once!!!"""
+        if self.__warm != True:
+            print("Warming Model for use!")
+            self.__warm = True
+            split = sentence.split(" ")
+            self.__wordstohandle = split
+            self.reply = []
+        else:
+            raise Exception("Attempted double warmup dont fucking do this!")
+        
+    def __activate(self, indexa, target):
+        ut = [sum(self.lweights[H][i]*self.embedings[indexa][i] for i in range(self.vecL))+sum(self.lhweights[H][i]*self.ht[i] for i in range(self.neurons))+self.bias[H] for H in range(self.neurons)]
+        prev_ht = self.ht
+        for i in range(self.neurons):
+            self.ht[i] = hybrid(ut[i])
+        ot = [0 for i in range(self.vocabL)]
+        for k in range(self.vocabL):
+            ot[k] = sum(self.who[k][i] * self.ht[i] for i in range(self.neurons))+self.bo[k]
+        pt = FixSoftmax(ot)
+        self.nexttoken = Argmax(pt)
+        self.loss = -log(pt[target])
+        d_ot = [0 for i in range(self.vocabL)]
+        for i in range(self.vocabL):
+            if i == target:
+                d_ot[i] = pt[i] - 1
+            else:
+                d_ot[i] = pt[i] - 0
+        d_who = [[0 for i in range(self.neurons)] for j in range(self.vocabL)]
+        for k in range(self.vocabL):
+            for i in range(self.neurons):
+                d_who[k][i] = d_ot[k] * self.ht[i]
+
+        d_bo = [0 for i in range(self.vocabL)]
+        for k in range(self.vocabL):
+            d_bo[k] = d_ot[k]
+
+        d_ht = [0 for _ in range(self.neurons)]
+        for i in range(self.neurons):
+            for k in range(self.vocabL):
+                d_ht[i] += d_ot[k] * self.who[k][i]
+
+        d_ut = [0 for _ in range(self.neurons)]
+        for i in range(self.neurons):
+            d_ut[i] = d_ht[i] * hybrid_prime(ut[i])
+
+        d_lweights = [[0 for _ in range(self.vecL)] for _ in range(self.neurons)]
+        for H in range(self.neurons):
+            for i in range(self.vecL):
+                d_lweights[H][i] = d_ut[H] * self.embedings[indexa][i]
+
+        d_lhweights = [[0 for _ in range(self.neurons)] for _ in range(self.neurons)]
+        for H in range(self.neurons):
+            for i in range(self.neurons):
+                d_lhweights[H][i] = d_ut[H] * prev_ht[i]
+
+        d_bias = [d_ut[H] for H in range(self.neurons)]
+
+        d_embed = [0 for _ in range(self.vecL)]
+        for i in range(self.vecL):
+            for H in range(self.neurons):
+                d_embed[i] += d_ut[H] * self.lweights[H][i]
+
+        for k in range(self.vocabL):
+            for i in range(self.neurons):
+                self.who[k][i] -= self.lr * d_who[k][i]
+
+        for k in range(self.vocabL):
+            self.bo[k] -= self.lr * d_bo[k]
+
+        for H in range(self.neurons):
+            for i in range(self.vecL):
+                self.lweights[H][i] -= self.lr * d_lweights[H][i]
+
+        for H in range(self.neurons):
+            for i in range(self.neurons):
+                self.lhweights[H][i] -= self.lr * d_lhweights[H][i]
+
+        for H in range(self.neurons):
+            self.bias[H] -= self.lr * d_bias[H]
+
+        for i in range(self.vecL):
+            self.embedings[indexa][i] -= self.lr * d_embed[i]
+        
+        self.reply.append(self.dictionary[self.nexttoken])
+        
+
+
+
+
+    def __getstuff(self, word: str):
+        return list.index(self.dictionary, word)
+
+    def run(self, times: int, f:str ="", s:str = ""):
+        if f != "" and s != "":
+            for i in range(times):
+                self.__activate(self.__getstuff(f), self.__getstuff(s))
+        else:
+            for j in range(times):
+                for i in range(len(self.__wordstohandle)-1):
+                    self.__activate(self.__getstuff(self.__wordstohandle[i]), self.__getstuff(self.__wordstohandle[i+1]))
+                self.reply.insert(0, self.dictionary[self.__getstuff(self.__wordstohandle[i])])
+                print(*self.reply)
+                self.reply.clear()
+
+    def train(self, turns: int):
+        for i in range(turns):
+            for h in range(self.vocabL):
+                for j in range(self.vocabL):
+                    self.__activate(h, j)
+                    print("word1:", self.dictionary[h],"target:" , self.dictionary[j])
+        write(self.embedings, "test/embed.mem")
+        write([self.vocabL, self.vecL, self.neurons, self.ht], "test/info.meta")
+        write(self.bias, "test/bias.mem")
+        write(self.lhweights, "test/lhweights.mem")
+        write(self.lweights, "test/lweights.mem")
+        write(self.dictionary, "test/dict.mem")
+        write(self.who, "test/who.mem")
+        write(self.bo, "test/bo.mem")
+        print(self.loss)
+        print(self.dictionary[self.nexttoken])

@@ -161,6 +161,10 @@ def FixSoftmax(x: list) -> list:
         newlist.append((exp(i-max(x)))/d)
     return newlist
 
+def Argmax(x: list) -> int:
+    mv = max(x)
+    return list.index(x, mv)
+
 def softplus(x: float) -> float:
     return log(1+exp(x))
 
