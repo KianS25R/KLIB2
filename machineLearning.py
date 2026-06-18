@@ -1,8 +1,8 @@
 """KLIB2 libary for machine learning such as rln and more..."""
 
-from .kmath import *
-from .agurk import write, read
-from .rnn_models import *
+from KLIB2.kmath import *
+from KLIB2.agurk import write, read
+from KLIB2.lm_core import activate_step
 
 def hybrid(z: float) -> float:
     if z <= 0:
@@ -130,79 +130,7 @@ class RNNLM_HYBRID():
             raise Exception("Attempted double warmup dont fucking do this!")
         
     def __activate(self, indexa, target):
-        ut = [sum(self.lweights[H][i]*self.embedings[indexa][i] for i in range(self.vecL))+sum(self.lhweights[H][i]*self.ht[i] for i in range(self.neurons))+self.bias[H] for H in range(self.neurons)]
-        prev_ht = self.ht
-        for i in range(self.neurons):
-            self.ht[i] = hybrid(ut[i])
-        ot = [0 for i in range(self.vocabL)]
-        for k in range(self.vocabL):
-            ot[k] = sum(self.who[k][i] * self.ht[i] for i in range(self.neurons))+self.bo[k]
-        pt = FixSoftmax(ot)
-        self.nexttoken = Argmax(pt)
-        self.loss = -log(pt[target])
-        d_ot = [0 for i in range(self.vocabL)]
-        for i in range(self.vocabL):
-            if i == target:
-                d_ot[i] = pt[i] - 1
-            else:
-                d_ot[i] = pt[i] - 0
-        d_who = [[0 for i in range(self.neurons)] for j in range(self.vocabL)]
-        for k in range(self.vocabL):
-            for i in range(self.neurons):
-                d_who[k][i] = d_ot[k] * self.ht[i]
-
-        d_bo = [0 for i in range(self.vocabL)]
-        for k in range(self.vocabL):
-            d_bo[k] = d_ot[k]
-
-        d_ht = [0 for _ in range(self.neurons)]
-        for i in range(self.neurons):
-            for k in range(self.vocabL):
-                d_ht[i] += d_ot[k] * self.who[k][i]
-
-        d_ut = [0 for _ in range(self.neurons)]
-        for i in range(self.neurons):
-            d_ut[i] = d_ht[i] * hybrid_prime(ut[i])
-
-        d_lweights = [[0 for _ in range(self.vecL)] for _ in range(self.neurons)]
-        for H in range(self.neurons):
-            for i in range(self.vecL):
-                d_lweights[H][i] = d_ut[H] * self.embedings[indexa][i]
-
-        d_lhweights = [[0 for _ in range(self.neurons)] for _ in range(self.neurons)]
-        for H in range(self.neurons):
-            for i in range(self.neurons):
-                d_lhweights[H][i] = d_ut[H] * prev_ht[i]
-
-        d_bias = [d_ut[H] for H in range(self.neurons)]
-
-        d_embed = [0 for _ in range(self.vecL)]
-        for i in range(self.vecL):
-            for H in range(self.neurons):
-                d_embed[i] += d_ut[H] * self.lweights[H][i]
-
-        for k in range(self.vocabL):
-            for i in range(self.neurons):
-                self.who[k][i] -= self.lr * d_who[k][i]
-
-        for k in range(self.vocabL):
-            self.bo[k] -= self.lr * d_bo[k]
-
-        for H in range(self.neurons):
-            for i in range(self.vecL):
-                self.lweights[H][i] -= self.lr * d_lweights[H][i]
-
-        for H in range(self.neurons):
-            for i in range(self.neurons):
-                self.lhweights[H][i] -= self.lr * d_lhweights[H][i]
-
-        for H in range(self.neurons):
-            self.bias[H] -= self.lr * d_bias[H]
-
-        for i in range(self.vecL):
-            self.embedings[indexa][i] -= self.lr * d_embed[i]
-        
-        self.reply.append(self.dictionary[self.nexttoken])
+        activate_step(self, indexa, target)
         
 
 

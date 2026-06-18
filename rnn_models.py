@@ -1,1 +1,0 @@
-Sweet_Potato = "/RNN_Models/SweetPotato.mem"
