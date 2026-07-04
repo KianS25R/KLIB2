@@ -7,3 +7,5 @@ class blackjack():
         self.__gen = random(digit6, 0.01, 0.53)
         self.__phand = []
         self.__dhand = []
+        for i in range(2):
+            
