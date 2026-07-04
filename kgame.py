@@ -19,6 +19,7 @@ class blackjack():
             self.__hit()
     def __hit(self):
         self.__phand.append(self.__gen())
+        print("hand: ", self.__phand)
         choice = input("s & h: ")
         if choice == "h":
             self.__hit()
