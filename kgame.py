@@ -10,4 +10,5 @@ class blackjack():
         for i in range(2):
             self.__phand.append(self.__gen())
             self.__dhand.append(self.__gen())
-        print(self.__phand)
+        print("you: ", self.__phand)
+        print("dealer: ", self.__dhand[0])
