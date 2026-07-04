@@ -18,7 +18,12 @@ class blackjack():
         elif choice == "h":
             self.__hit()
     def __hit(self):
-        pass
+        self.__phand.append(self.__gen())
+        choice = input("s & h: ")
+        if choice == "h":
+            self.__hit()
+        elif choice == "s":
+            self.__stand()
     
     def __stand(self):
         pass
