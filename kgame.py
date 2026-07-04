@@ -12,3 +12,8 @@ class blackjack():
             self.__dhand.append(self.__gen())
         print("you: ", self.__phand)
         print("dealer: ", self.__dhand[0])
+        choice = input("s & h: ")
+        if choice == "s":
+            pass
+        elif choice == "h":
+            pass
