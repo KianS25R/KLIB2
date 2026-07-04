@@ -14,6 +14,11 @@ class blackjack():
         print("dealer: ", self.__dhand[0])
         choice = input("s & h: ")
         if choice == "s":
-            pass
+            self.__stand()
         elif choice == "h":
-            pass
+            self.__hit()
+    def __hit(self):
+        pass
+    
+    def __stand(self):
+        pass
