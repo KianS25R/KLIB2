@@ -152,18 +152,19 @@ class RNNLM_HYBRID():
                 self.reply.clear()
 
     def train(self, turns: int):
+        modelloc = input("Path: ")
         for i in range(turns):
             for h in range(self.vocabL):
                 for j in range(self.vocabL):
                     self.__activate(h, j)
                     print("word1:", self.dictionary[h],"target:" , self.dictionary[j])
-        write(self.embedings, "test/embed.mem")
-        write([self.vocabL, self.vecL, self.neurons, self.ht], "test/info.meta")
-        write(self.bias, "test/bias.mem")
-        write(self.lhweights, "test/lhweights.mem")
-        write(self.lweights, "test/lweights.mem")
-        write(self.dictionary, "test/dict.mem")
-        write(self.who, "test/who.mem")
-        write(self.bo, "test/bo.mem")
+        write(self.embedings, f"{modelloc}/embed.mem")
+        write([self.vocabL, self.vecL, self.neurons, self.ht], f"{modelloc}/info.meta")
+        write(self.bias, f"{modelloc}/bias.mem")
+        write(self.lhweights, f"{modelloc}/lhweights.mem")
+        write(self.lweights, f"{modelloc}/lweights.mem")
+        write(self.dictionary, f"{modelloc}/dict.mem")
+        write(self.who, f"{modelloc}/who.mem")
+        write(self.bo, f"{modelloc}/bo.mem")
         print(self.loss)
         print(self.dictionary[self.nexttoken])
