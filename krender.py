@@ -1,5 +1,7 @@
 """KLIB2 3D rendering """
 
+import KLIB2.kmath as kmath
+
 #Formulars
 
 def xback(distance, angle):
