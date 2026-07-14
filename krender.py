@@ -10,4 +10,6 @@ def xback(distance, angle):
     return distance*theta
     
 def yback(distance, angle):
-    pass
+    a = kmath.rad(angle)
+    theta = kmath.cos_rad(a)
+    return distance*theta
