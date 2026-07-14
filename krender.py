@@ -16,6 +16,7 @@ def yback(distance, angle):
     return distance*theta
     
 class kobject3d():
-    def __init__(self, position: vector3=vector3(0,0,0)):
+    def __init__(self, position: vector3=vector3(0,0,0), size: vector3=vector3(1,1,1)):
         super().__init__()
         self.position = position
+        self.size = size
