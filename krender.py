@@ -17,3 +17,4 @@ def yback(distance, angle):
 class kobject3d():
     def __init__(self):
         super().__init__()
+        self.position
