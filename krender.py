@@ -2,6 +2,7 @@
 
 import KLIB2.kmath as kmath
 from KLIB2.vector3 import vector3
+from KLIB2.vector2 import vector2
 
 #Formulars
 
@@ -23,4 +24,4 @@ class kobject3d():
         self.cache = []
         
     def update(self):
-        pass
+        self.cache = [vector2(*[self.position.xyz[d]-self.scale[d]/2 for d in range(len(self.position.xyz))])]
