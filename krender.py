@@ -5,7 +5,9 @@ import KLIB2.kmath as kmath
 #Formulars
 
 def xback(distance, angle):
-    pass
+    a = kmath.rad(angle)
+    theta = kmath.sin_rad(a)
+    return distance*theta
     
 def yback(distance, angle):
     pass
