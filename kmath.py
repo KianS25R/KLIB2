@@ -31,6 +31,10 @@ def asindeg(number: float) -> float:
 def deg(radians: float) -> float:
     """turns radians into degress"""
     return radians*(180/pi())
+    
+def rad(degress: float) -> float:
+    """turns degress into radians"""
+    return degress*0.0174533
 
 def atan(number: float) -> float:
     """returns inverse tan for number"""
