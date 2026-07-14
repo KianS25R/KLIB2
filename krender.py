@@ -18,4 +18,4 @@ def yback(distance, angle):
 class kobject3d():
     def __init__(self, position: vector3=vector3(0,0,0)):
         super().__init__()
-        self.position
+        self.position = position
