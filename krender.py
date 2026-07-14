@@ -1,6 +1,7 @@
 """KLIB2 3D rendering """
 
 import KLIB2.kmath as kmath
+import KLIB2.vector3 as vector3
 
 #Formulars
 
