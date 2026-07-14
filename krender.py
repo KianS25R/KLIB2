@@ -1,7 +1,7 @@
 """KLIB2 3D rendering """
 
 import KLIB2.kmath as kmath
-import KLIB2.vector3 as vector3
+from KLIB2.vector3 import vector3
 
 #Formulars
 
@@ -16,6 +16,6 @@ def yback(distance, angle):
     return distance*theta
     
 class kobject3d():
-    def __init__(self):
+    def __init__(self, position: vector3=vector3(0,0,0)):
         super().__init__()
         self.position
