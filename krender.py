@@ -20,6 +20,7 @@ class kobject3d():
         super().__init__()
         self.position = position
         self.size = size
+        self.cache = []
         
     def update(self):
         pass
